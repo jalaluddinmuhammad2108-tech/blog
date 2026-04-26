@@ -33,7 +33,9 @@ if (!in_array($mime, $allowed)) {
     exit;
 }
 
-$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+// Ambil ekstensi dari MIME type (bukan dari nama file user)
+$mimeToExt = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif', 'image/webp' => 'webp'];
+$ext = $mimeToExt[$mime];
 $namaFile = uniqid('artikel_', true) . '.' . $ext;
 $tujuan = 'uploads_artikel/' . $namaFile;
 
@@ -79,3 +81,4 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
+?>

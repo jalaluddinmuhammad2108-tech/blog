@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 require 'koneksi.php';
 
-$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 if ($id <= 0) {
     echo json_encode(['status' => 'error', 'message' => 'ID tidak valid']);
     exit;
@@ -22,3 +22,4 @@ if ($row) {
 
 $stmt->close();
 $conn->close();
+?>

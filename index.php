@@ -39,6 +39,7 @@
       min-height: 100vh;
     }
 
+    /* HEADER */
     header {
       background: var(--sidebar);
       color: #fff;
@@ -73,11 +74,13 @@
       color: #94a3b8;
     }
 
+    /* LAYOUT */
     .layout {
       display: flex;
       flex: 1;
     }
 
+    /* SIDEBAR */
     aside {
       width: 220px;
       background: var(--sidebar);
@@ -121,12 +124,14 @@
       flex-shrink: 0;
     }
 
+    /* MAIN */
     main {
       flex: 1;
       padding: 28px;
       overflow-x: auto;
     }
 
+    /* CARD */
     .card {
       background: var(--card);
       border-radius: var(--radius);
@@ -147,6 +152,7 @@
       font-weight: 600;
     }
 
+    /* BUTTONS */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -515,7 +521,7 @@
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              + Tambah Penulis
+              Tambah Penulis
             </button>
           </div>
           <div class="table-wrap">
@@ -549,7 +555,7 @@
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              + Tambah Artikel
+              Tambah Artikel
             </button>
           </div>
           <div class="table-wrap">
@@ -584,7 +590,7 @@
                 <line x1="12" y1="5" x2="12" y2="19" />
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              + Tambah Kategori
+              Tambah Kategori
             </button>
           </div>
           <div class="table-wrap">
@@ -860,11 +866,19 @@
     }
 
     function simpanPenulis() {
+      const namaDepan = $('tp-nama-depan').value.trim();
+      const namaBelakang = $('tp-nama-belakang').value.trim();
+      const username = $('tp-username').value.trim();
+      const password = $('tp-password').value;
+      if (!namaDepan || !namaBelakang || !username || !password) {
+        showToast('Semua field wajib diisi', 'error'); return;
+      }
+
       const fd = new FormData();
-      fd.append('nama_depan', $('tp-nama-depan').value.trim());
-      fd.append('nama_belakang', $('tp-nama-belakang').value.trim());
-      fd.append('user_name', $('tp-username').value.trim());
-      fd.append('password', $('tp-password').value);
+      fd.append('nama_depan', namaDepan);
+      fd.append('nama_belakang', namaBelakang);
+      fd.append('user_name', username);
+      fd.append('password', password);
       const foto = $('tp-foto').files[0];
       if (foto) fd.append('foto', foto);
 
@@ -878,7 +892,8 @@
           } else {
             showToast(res.message, 'error');
           }
-        });
+        })
+        .catch(() => showToast('Terjadi kesalahan koneksi ke server', 'error'));
     }
 
     function openEditPenulis(id) {
@@ -898,11 +913,18 @@
     }
 
     function updatePenulis() {
+      const namaDepan = $('ep-nama-depan').value.trim();
+      const namaBelakang = $('ep-nama-belakang').value.trim();
+      const username = $('ep-username').value.trim();
+      if (!namaDepan || !namaBelakang || !username) {
+        showToast('Nama depan, nama belakang, dan username wajib diisi', 'error'); return;
+      }
+
       const fd = new FormData();
       fd.append('id', $('ep-id').value);
-      fd.append('nama_depan', $('ep-nama-depan').value.trim());
-      fd.append('nama_belakang', $('ep-nama-belakang').value.trim());
-      fd.append('user_name', $('ep-username').value.trim());
+      fd.append('nama_depan', namaDepan);
+      fd.append('nama_belakang', namaBelakang);
+      fd.append('user_name', username);
       fd.append('password', $('ep-password').value);
       const foto = $('ep-foto').files[0];
       if (foto) fd.append('foto', foto);
@@ -917,7 +939,8 @@
           } else {
             showToast(res.message, 'error');
           }
-        });
+        })
+        .catch(() => showToast('Terjadi kesalahan koneksi ke server', 'error'));
     }
 
     // ================================================================
@@ -947,21 +970,35 @@
     }
 
     function loadDropdownPenulis(selectId, selectedId = null) {
-      return fetch('ambil_penulis.php').then(r => r.json()).then(res => {
-        const sel = $(selectId);
-        sel.innerHTML = res.data.map(p =>
-          `<option value="${p.id}" ${selectedId == p.id ? 'selected' : ''}>${esc(p.nama_depan)} ${esc(p.nama_belakang)}</option>`
-        ).join('');
-      });
+      return fetch('ambil_penulis.php')
+        .then(r => r.json())
+        .then(res => {
+          const sel = $(selectId);
+          if (!res.data || !res.data.length) {
+            sel.innerHTML = '<option value="">-- Tidak ada penulis --</option>';
+            return;
+          }
+          sel.innerHTML = res.data.map(p =>
+            `<option value="${p.id}" ${selectedId == p.id ? 'selected' : ''}>${esc(p.nama_depan)} ${esc(p.nama_belakang)}</option>`
+          ).join('');
+        })
+        .catch(() => { $(selectId).innerHTML = '<option value="">-- Gagal memuat --</option>'; });
     }
 
     function loadDropdownKategori(selectId, selectedId = null) {
-      return fetch('ambil_kategori.php').then(r => r.json()).then(res => {
-        const sel = $(selectId);
-        sel.innerHTML = res.data.map(k =>
-          `<option value="${k.id}" ${selectedId == k.id ? 'selected' : ''}>${esc(k.nama_kategori)}</option>`
-        ).join('');
-      });
+      return fetch('ambil_kategori.php')
+        .then(r => r.json())
+        .then(res => {
+          const sel = $(selectId);
+          if (!res.data || !res.data.length) {
+            sel.innerHTML = '<option value="">-- Tidak ada kategori --</option>';
+            return;
+          }
+          sel.innerHTML = res.data.map(k =>
+            `<option value="${k.id}" ${selectedId == k.id ? 'selected' : ''}>${esc(k.nama_kategori)}</option>`
+          ).join('');
+        })
+        .catch(() => { $(selectId).innerHTML = '<option value="">-- Gagal memuat --</option>'; });
     }
 
     function openTambahArtikel() {
@@ -972,13 +1009,18 @@
     }
 
     function simpanArtikel() {
+      const judul = $('ta-judul').value.trim();
+      const isi = $('ta-isi').value.trim();
+      const gambar = $('ta-gambar').files[0];
+      if (!judul || !isi) { showToast('Judul dan isi artikel wajib diisi', 'error'); return; }
+      if (!gambar) { showToast('Gambar artikel wajib diunggah', 'error'); return; }
+
       const fd = new FormData();
-      fd.append('judul', $('ta-judul').value.trim());
+      fd.append('judul', judul);
       fd.append('id_penulis', $('ta-penulis').value);
       fd.append('id_kategori', $('ta-kategori').value);
-      fd.append('isi', $('ta-isi').value.trim());
-      const gambar = $('ta-gambar').files[0];
-      if (gambar) fd.append('gambar', gambar);
+      fd.append('isi', isi);
+      fd.append('gambar', gambar);
 
       fetch('simpan_artikel.php', { method: 'POST', body: fd })
         .then(r => r.json())
@@ -990,7 +1032,8 @@
           } else {
             showToast(res.message, 'error');
           }
-        });
+        })
+        .catch(() => showToast('Terjadi kesalahan koneksi ke server', 'error'));
     }
 
     function openEditArtikel(id) {
@@ -1011,12 +1054,16 @@
     }
 
     function updateArtikel() {
+      const judul = $('ea-judul').value.trim();
+      const isi = $('ea-isi').value.trim();
+      if (!judul || !isi) { showToast('Judul dan isi artikel wajib diisi', 'error'); return; }
+
       const fd = new FormData();
       fd.append('id', $('ea-id').value);
-      fd.append('judul', $('ea-judul').value.trim());
+      fd.append('judul', judul);
       fd.append('id_penulis', $('ea-penulis').value);
       fd.append('id_kategori', $('ea-kategori').value);
-      fd.append('isi', $('ea-isi').value.trim());
+      fd.append('isi', isi);
       const gambar = $('ea-gambar').files[0];
       if (gambar) fd.append('gambar', gambar);
 
@@ -1030,7 +1077,8 @@
           } else {
             showToast(res.message, 'error');
           }
-        });
+        })
+        .catch(() => showToast('Terjadi kesalahan koneksi ke server', 'error'));
     }
 
     // ================================================================
@@ -1063,8 +1111,11 @@
     }
 
     function simpanKategori() {
+      const nama = $('tk-nama').value.trim();
+      if (!nama) { showToast('Nama kategori wajib diisi', 'error'); return; }
+
       const fd = new FormData();
-      fd.append('nama_kategori', $('tk-nama').value.trim());
+      fd.append('nama_kategori', nama);
       fd.append('keterangan', $('tk-ket').value.trim());
 
       fetch('simpan_kategori.php', { method: 'POST', body: fd })
@@ -1077,7 +1128,8 @@
           } else {
             showToast(res.message, 'error');
           }
-        });
+        })
+        .catch(() => showToast('Terjadi kesalahan koneksi ke server', 'error'));
     }
 
     function openEditKategori(id) {
@@ -1094,9 +1146,12 @@
     }
 
     function updateKategori() {
+      const nama = $('ek-nama').value.trim();
+      if (!nama) { showToast('Nama kategori wajib diisi', 'error'); return; }
+
       const fd = new FormData();
       fd.append('id', $('ek-id').value);
-      fd.append('nama_kategori', $('ek-nama').value.trim());
+      fd.append('nama_kategori', nama);
       fd.append('keterangan', $('ek-ket').value.trim());
 
       fetch('update_kategori.php', { method: 'POST', body: fd })
@@ -1109,7 +1164,8 @@
           } else {
             showToast(res.message, 'error');
           }
-        });
+        })
+        .catch(() => showToast('Terjadi kesalahan koneksi ke server', 'error'));
     }
 
     // ================================================================
@@ -1135,7 +1191,8 @@
             if (tipe === 'artikel') loadArtikel();
             if (tipe === 'kategori') loadKategori();
           }
-        });
+        })
+        .catch(() => { closeModal('modal-hapus'); showToast('Terjadi kesalahan koneksi ke server', 'error'); });
     }
 
     // ================================================================

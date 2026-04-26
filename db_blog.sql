@@ -63,12 +63,12 @@ CREATE TABLE IF NOT EXISTS artikel (
 
 -- ============================================================
 -- Data Contoh: penulis
--- (password: password123 - di-hash dengan bcrypt)
+-- Catatan: password di bawah adalah hash bcrypt untuk "password123"
+-- Ganti password melalui aplikasi setelah import
 -- ============================================================
-INSERT INTO penulis (nama_depan, nama_belakang, user_name, password, foto) VALUES
-('Ahmad',  'Fauzi',   'ahmad_f', '$2y$10$YourHashedPasswordHere1234567890', 'default.png'),
-('Siti',   'Rahayu',  'siti_r',  '$2y$10$YourHashedPasswordHere1234567890', 'default.png'),
-('Budi',   'Santoso', 'budi_s',  '$2y$10$YourHashedPasswordHere1234567890', 'default.png');
+-- INSERT INTO penulis (nama_depan, nama_belakang, user_name, password, foto) VALUES
+-- ('Ahmad',  'Fauzi',   'ahmad_f', '$2y$10$...', 'default.png');
+-- Tambahkan data penulis melalui menu Kelola Penulis di aplikasi.
 
 -- ============================================================
 -- Data Contoh: kategori_artikel
@@ -77,10 +77,3 @@ INSERT INTO kategori_artikel (nama_kategori, keterangan) VALUES
 ('Tutorial',   'Artikel panduan langkah demi langkah'),
 ('Database',   'Artikel seputar pengelolaan database'),
 ('Web Design', 'Artikel tentang desain antarmuka web');
-
--- ============================================================
--- Data Contoh: artikel
--- ============================================================
-INSERT INTO artikel (id_penulis, id_kategori, judul, isi, gambar, hari_tanggal) VALUES
-(1, 1, 'Pengenalan PHP 8', 'PHP 8 membawa banyak fitur baru yang memudahkan pengembangan web modern.', 'default_artikel.png', 'Senin, 13 April 2026 | 09:00'),
-(2, 2, 'Belajar MySQL Dasar', 'MySQL adalah sistem manajemen database relasional yang sangat populer.', 'default_artikel.png', 'Selasa, 14 April 2026 | 10:30');

@@ -20,12 +20,17 @@ if ($total > 0) {
     exit;
 }
 
-// Ambil foto untuk dihapus
+// Ambil foto untuk dihapus, sekaligus cek data ada
 $stmtFoto = $conn->prepare("SELECT foto FROM penulis WHERE id = ?");
 $stmtFoto->bind_param('i', $id);
 $stmtFoto->execute();
 $row = $stmtFoto->get_result()->fetch_assoc();
 $stmtFoto->close();
+
+if (!$row) {
+    echo json_encode(['status' => 'error', 'message' => 'Data penulis tidak ditemukan']);
+    exit;
+}
 
 $stmt = $conn->prepare("DELETE FROM penulis WHERE id = ?");
 $stmt->bind_param('i', $id);
@@ -42,3 +47,4 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
+?>

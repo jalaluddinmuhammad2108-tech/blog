@@ -2,9 +2,9 @@
 header('Content-Type: application/json');
 require 'koneksi.php';
 
-$id            = (int)($_POST['id'] ?? 0);
+$id = (int) ($_POST['id'] ?? 0);
 $nama_kategori = trim($_POST['nama_kategori'] ?? '');
-$keterangan    = trim($_POST['keterangan'] ?? '');
+$keterangan = trim($_POST['keterangan'] ?? '');
 
 if ($id <= 0 || !$nama_kategori) {
     echo json_encode(['status' => 'error', 'message' => 'Data tidak lengkap']);
@@ -26,3 +26,4 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
+?>

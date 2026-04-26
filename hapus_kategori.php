@@ -2,9 +2,21 @@
 header('Content-Type: application/json');
 require 'koneksi.php';
 
-$id = (int) ($_POST['id'] ?? 0);
+$id = (int)($_POST['id'] ?? 0);
 if ($id <= 0) {
     echo json_encode(['status' => 'error', 'message' => 'ID tidak valid']);
+    exit;
+}
+
+// Cek apakah kategori ada
+$stmtCekAda = $conn->prepare("SELECT id FROM kategori_artikel WHERE id = ?");
+$stmtCekAda->bind_param('i', $id);
+$stmtCekAda->execute();
+$ada = $stmtCekAda->get_result()->fetch_assoc();
+$stmtCekAda->close();
+
+if (!$ada) {
+    echo json_encode(['status' => 'error', 'message' => 'Data kategori tidak ditemukan']);
     exit;
 }
 
@@ -31,3 +43,4 @@ if ($stmt->execute()) {
 
 $stmt->close();
 $conn->close();
+?>
