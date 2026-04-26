@@ -1,0 +1,7 @@
+# Mencegah eksekusi file PHP di folder uploads_penulis
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>
+
+Options -ExecCGI
+AddHandler cgi-script .php .php3 .php4 .php5 .phtml .pl .py .cgi
