@@ -1,5 +1,5 @@
 **UTS Web Programming A**
-Nama: MUhammad Jalaluddin
+Nama: Muhammad Jalaluddin
 NIM: 240605110235
 
 **Sistem Manajemen Bloc CMS**
