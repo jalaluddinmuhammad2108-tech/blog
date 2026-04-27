@@ -19,13 +19,13 @@ Fitur Utama:
    - Tambah kategori
    - Edit kategori
    - Hapus kategori
-UI/UX yang digunakan:
+**UI/UX yang digunakan:**
 - Tampilan modern (dashboard)
 - sidebar navigasi
 - Modul popup (tambah/edit)
 - Notifikasi
 - Loading spinner
-Teknologi yang digunakan
+**Teknologi yang digunakan**
 - Frontend: HTML, CSS, JavaScript
 - Backend: PHP
 - Database: MySQL
