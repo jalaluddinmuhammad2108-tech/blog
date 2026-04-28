@@ -1,6 +1,7 @@
 **UTS Web Programming A**
 Nama: Muhammad Jalaluddin
 NIM: 240605110235
+Project: Sistem Manajemen Blog (CMS)
 
 **Sistem Manajemen Bloc CMS**
 Fitur Utama:
@@ -30,3 +31,53 @@ Fitur Utama:
 - Backend: PHP
 - Database: MySQL
 - Server: XAMPP
+
+**Struktur Folder**
+Blog/
+|
+|-index.php
+|-koneksi.php
+|
+|-uploads_penulis/
+|-uploads_artikel/
+|
+|-ambil_penulis.php
+|-ambil_satu_penulis.php
+|-simpan_penulis.php
+|-update_satu_penulis.php
+|-hapus_penulis.php
+|
+|-ambil_artikel.php
+|-ambil_satu_artikel.php
+|-simpan_artikel.php
+|-update_satu_artikel.php
+|-hapus_artikel.php
+|
+|-ambil_kategori.php
+|-ambil_satu_kategori.php
+|-simpan_kategori.php
+|-update_satu_kategori.php
+|-hapus_kategori.php
+
+**Struktur Database**
+1. Tabel Penulis
+id = INT AI (PK)
+nama_depan = VARCHAR
+nama_belakang = VARCHAR
+user_name = VARCHAR
+password = VARCHAR
+foto = VARCHAR
+
+2. Tabel Kategori
+id = INT AI (PK)
+nama_kategori = VARCHAR
+keterangan = TEXT
+
+3. Tabel artikel
+id = INT AI (PK)
+judul = VARCHAR
+isi = TEXT
+gambar = VARCHAR
+id_penulis = INT (FK)
+id_kategori = INT (FK)
+tanggal = DATETIME
